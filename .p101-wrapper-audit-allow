@@ -1,0 +1,3 @@
+# Thread creation must inspect its optional native attribute without adding a
+# second traced or fault-injected wrapper operation.
+src/posix/pthread.c:p101_pthread_create:pthread_attr_getdetachstate
