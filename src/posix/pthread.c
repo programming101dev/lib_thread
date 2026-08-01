@@ -101,7 +101,7 @@ int p101_pthread_attr_destroy(const struct p101_env *env, struct p101_error *err
     }
     else
     {
-        P101_TRACK_POINTER_RESOURCE_RELEASE(env, "pthread-attributes", attr, NULL);
+        P101_TRACK_POINTER_RESOURCE_RELEASE(env, "pthread-attributes", (const void *)attr, NULL);
     }
 
     P101_TRACE_EXIT(env);
@@ -174,7 +174,7 @@ int p101_pthread_attr_init(const struct p101_env *env, struct p101_error *err, p
     }
     else
     {
-        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, "pthread-attributes", attr, 0U, NULL);
+        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, "pthread-attributes", (const void *)attr, 0U, NULL);
     }
 
     P101_TRACE_EXIT(env);
