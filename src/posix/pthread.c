@@ -88,10 +88,12 @@ int p101_pthread_atfork(const struct p101_env *env, struct p101_error *err, void
 
 int p101_pthread_attr_destroy(const struct p101_env *env, struct p101_error *err, pthread_attr_t *attr)
 {
-    int ret_val;
+    char resource_id[P101_ENV_POINTER_RESOURCE_ID_SIZE];
+    int  ret_val;
 
     P101_TRACE(env);
     P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    p101_env_pointer_resource_id(resource_id, sizeof(resource_id), attr);
     errno   = 0;
     ret_val = pthread_attr_destroy(attr);
 
@@ -101,7 +103,7 @@ int p101_pthread_attr_destroy(const struct p101_env *env, struct p101_error *err
     }
     else
     {
-        P101_TRACK_POINTER_RESOURCE_RELEASE(env, "pthread-attributes", (const void *)attr, NULL);
+        P101_TRACK_RESOURCE_RELEASE(env, "pthread-attributes", resource_id, NULL);
     }
 
     P101_TRACE_EXIT(env);
