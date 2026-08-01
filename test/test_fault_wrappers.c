@@ -2,8 +2,10 @@
 #include <p101_env/env.h>
 #include <p101_error/error.h>
 #include <p101_thread/thread.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static int failures;
 
@@ -67,11 +69,11 @@ static void test_p101_pthread_attr_destroy(struct p101_env *env, struct p101_err
 #ifdef __linux__
     static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOMEM};
+    static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #else
-    static const int errors[] = {ENOMEM};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -92,13 +94,13 @@ static void test_p101_pthread_attr_destroy(struct p101_env *env, struct p101_err
 static void test_p101_pthread_attr_getdetachstate(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -121,9 +123,9 @@ static void test_p101_pthread_attr_getguardsize(struct p101_env *env, struct p10
 #ifdef __linux__
     static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOMEM};
+    static const int errors[] = {EIO};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
     static const int errors[] = {EINVAL};
 #endif
@@ -146,13 +148,13 @@ static void test_p101_pthread_attr_getguardsize(struct p101_env *env, struct p10
 static void test_p101_pthread_attr_getinheritsched(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -173,13 +175,13 @@ static void test_p101_pthread_attr_getinheritsched(struct p101_env *env, struct 
 static void test_p101_pthread_attr_getschedparam(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -200,13 +202,13 @@ static void test_p101_pthread_attr_getschedparam(struct p101_env *env, struct p1
 static void test_p101_pthread_attr_getschedpolicy(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -227,13 +229,13 @@ static void test_p101_pthread_attr_getschedpolicy(struct p101_env *env, struct p
 static void test_p101_pthread_attr_getscope(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
-    static const int errors[] = {EINVAL, ENOTSUP};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -254,13 +256,13 @@ static void test_p101_pthread_attr_getscope(struct p101_env *env, struct p101_er
 static void test_p101_pthread_attr_getstack(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOMEM};
+    static const int errors[] = {EIO};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
-    static const int errors[] = {EACCES, EINVAL};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -281,13 +283,13 @@ static void test_p101_pthread_attr_getstack(struct p101_env *env, struct p101_er
 static void test_p101_pthread_attr_getstacksize(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -310,9 +312,9 @@ static void test_p101_pthread_attr_init(struct p101_env *env, struct p101_error 
 #ifdef __linux__
     static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOMEM};
+    static const int errors[] = {ENOMEM};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {ENOMEM};
 #else
     static const int errors[] = {ENOMEM};
 #endif
@@ -339,7 +341,7 @@ static void test_p101_pthread_attr_setdetachstate(struct p101_env *env, struct p
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #else
     static const int errors[] = {EINVAL};
 #endif
@@ -364,9 +366,9 @@ static void test_p101_pthread_attr_setguardsize(struct p101_env *env, struct p10
 #ifdef __linux__
     static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOMEM};
+    static const int errors[] = {EIO};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EIO};
 #else
     static const int errors[] = {EINVAL};
 #endif
@@ -393,7 +395,7 @@ static void test_p101_pthread_attr_setinheritsched(struct p101_env *env, struct 
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #else
     static const int errors[] = {EINVAL, ENOTSUP};
 #endif
@@ -420,7 +422,7 @@ static void test_p101_pthread_attr_setschedparam(struct p101_env *env, struct p1
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL, ENOTSUP};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL, ENOTSUP};
 #else
     static const int errors[] = {EINVAL, ENOTSUP};
 #endif
@@ -447,7 +449,7 @@ static void test_p101_pthread_attr_setschedpolicy(struct p101_env *env, struct p
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL, ENOTSUP};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL, ENOTSUP};
 #else
     static const int errors[] = {EINVAL, ENOTSUP};
 #endif
@@ -474,7 +476,7 @@ static void test_p101_pthread_attr_setscope(struct p101_env *env, struct p101_er
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL, ENOTSUP};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL, ENOTSUP};
 #else
     static const int errors[] = {EINVAL, ENOTSUP};
 #endif
@@ -499,9 +501,9 @@ static void test_p101_pthread_attr_setstack(struct p101_env *env, struct p101_er
 #ifdef __linux__
     static const int errors[] = {EINVAL};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOMEM};
+    static const int errors[] = {EIO};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #else
     static const int errors[] = {EACCES, EINVAL};
 #endif
@@ -528,7 +530,7 @@ static void test_p101_pthread_attr_setstacksize(struct p101_env *env, struct p10
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOMEM, ENOTSUP};
+    static const int errors[] = {EINVAL};
 #else
     static const int errors[] = {EINVAL};
 #endif
@@ -578,7 +580,7 @@ static void test_p101_pthread_cancel(struct p101_env *env, struct p101_error *er
 static void test_p101_pthread_create(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EAGAIN, EINVAL};
+    static const int errors[] = {EAGAIN, EINVAL, EPERM};
 #elif defined(__APPLE__)
     static const int errors[] = {EAGAIN, EINVAL, EPERM};
 #elif defined(__FreeBSD__)
@@ -632,13 +634,13 @@ static void test_p101_pthread_detach(struct p101_env *env, struct p101_error *er
 static void test_p101_pthread_getschedparam(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EINVAL, EPERM, ESRCH};
+    static const int errors[] = {EIO};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL, ENOTSUP, ESRCH};
+    static const int errors[] = {ESRCH};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EINVAL, ENOTSUP, EPERM, ESRCH};
+    static const int errors[] = {ESRCH};
 #else
-    static const int errors[] = {EINVAL, ENOTSUP, EPERM};
+    static const int errors[] = {EIO};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -663,7 +665,7 @@ static void test_p101_pthread_join(struct p101_env *env, struct p101_error *err)
 #elif defined(__APPLE__)
     static const int errors[] = {EDEADLK, EINVAL, ESRCH};
 #elif defined(__FreeBSD__)
-    static const int errors[] = {EBUSY, EDEADLK, EINVAL, EOPNOTSUPP, ESRCH, ETIMEDOUT};
+    static const int errors[] = {EDEADLK, EINVAL, EOPNOTSUPP, ESRCH};
 #else
     static const int errors[] = {EDEADLK};
 #endif
@@ -686,7 +688,7 @@ static void test_p101_pthread_join(struct p101_env *env, struct p101_error *err)
 static void test_p101_pthread_key_create(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EAGAIN, EINVAL};
+    static const int errors[] = {EAGAIN};
 #elif defined(__APPLE__)
     static const int errors[] = {EAGAIN, ENOMEM};
 #elif defined(__FreeBSD__)
@@ -713,7 +715,7 @@ static void test_p101_pthread_key_create(struct p101_env *env, struct p101_error
 static void test_p101_pthread_key_delete(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EAGAIN, EINVAL};
+    static const int errors[] = {EINVAL};
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL};
 #elif defined(__FreeBSD__)
@@ -848,7 +850,7 @@ static void test_p101_pthread_setschedparam(struct p101_env *env, struct p101_er
 static void test_p101_pthread_setspecific(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int errors[] = {EAGAIN, EINVAL};
+    static const int errors[] = {EINVAL};
 #elif defined(__APPLE__)
     static const int errors[] = {EINVAL, ENOMEM};
 #elif defined(__FreeBSD__)
