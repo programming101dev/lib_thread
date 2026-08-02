@@ -93,7 +93,7 @@ int p101_pthread_attr_destroy(const struct p101_env *env, struct p101_error *err
 
     P101_TRACE(env);
     P101_WRAPPER_FAULT_RETURN_CODE(env, err);
-    p101_env_pointer_resource_id(resource_id, sizeof(resource_id), attr);
+    p101_env_pointer_resource_id(resource_id, sizeof(resource_id), (const void *)attr);
     errno   = 0;
     ret_val = pthread_attr_destroy(attr);
 
