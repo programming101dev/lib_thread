@@ -29,7 +29,6 @@ set(p101_thread_HEADERS
 set(p101_thread_LINK_LIBRARIES
         p101_error
         p101_env
-        p101_tool_event
         p101_c
 )
 
