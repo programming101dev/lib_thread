@@ -22,7 +22,7 @@ int p101_pthread_kill(const struct p101_env *env, struct p101_error *err, pthrea
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     errno   = 0;
     ret_val = pthread_kill(thread, sig);
 
@@ -31,7 +31,7 @@ int p101_pthread_kill(const struct p101_env *env, struct p101_error *err, pthrea
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -40,7 +40,7 @@ int p101_pthread_sigmask(const struct p101_env *env, struct p101_error *err, int
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     errno   = 0;
     ret_val = pthread_sigmask(how, set, oset);
 
@@ -49,6 +49,6 @@ int p101_pthread_sigmask(const struct p101_env *env, struct p101_error *err, int
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }

@@ -253,14 +253,14 @@ static void test_p101_pthread_attr_getguardsize(struct p101_env *env, struct p10
     memset(argument_3, 0xA5, sizeof(argument_3));
     memcpy(argument_3_before, argument_3, sizeof(argument_3));
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #else
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -568,8 +568,8 @@ static void test_p101_pthread_attr_init(struct p101_env *env, struct p101_error 
     memset(argument_2, 0xA5, sizeof(argument_2));
     memcpy(argument_2_before, argument_2, sizeof(argument_2));
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__APPLE__)
     static const int         errors[]      = {ENOMEM};
     static const char *const error_names[] = {"ENOMEM"};
@@ -658,14 +658,14 @@ static void test_p101_pthread_attr_setguardsize(struct p101_env *env, struct p10
     memset(argument_2, 0xA5, sizeof(argument_2));
     memcpy(argument_2_before, argument_2, sizeof(argument_2));
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #else
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -890,8 +890,8 @@ static void test_p101_pthread_attr_setstack(struct p101_env *env, struct p101_er
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EACCES, EINVAL};
+    static const char *const error_names[] = {"EACCES", "EINVAL"};
 #elif defined(__FreeBSD__)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -1493,8 +1493,8 @@ static void test_p101_pthread_sigmask(struct p101_env *env, struct p101_error *e
     memset(argument_4, 0xA5, sizeof(argument_4));
     memcpy(argument_4_before, argument_4, sizeof(argument_4));
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};

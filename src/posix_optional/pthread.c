@@ -22,7 +22,7 @@ int p101_pthread_attr_getinheritsched(const struct p101_env *env, struct p101_er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_getinheritsched(attr, inheritsched);
 
     if(ret_val != 0)
@@ -30,7 +30,7 @@ int p101_pthread_attr_getinheritsched(const struct p101_env *env, struct p101_er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -39,7 +39,7 @@ int p101_pthread_attr_getschedpolicy(const struct p101_env *env, struct p101_err
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_getschedpolicy(attr, policy);
 
     if(ret_val != 0)
@@ -47,7 +47,7 @@ int p101_pthread_attr_getschedpolicy(const struct p101_env *env, struct p101_err
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -56,7 +56,7 @@ int p101_pthread_attr_getscope(const struct p101_env *env, struct p101_error *er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_getscope(attr, contentionscope);
 
     if(ret_val != 0)
@@ -64,7 +64,7 @@ int p101_pthread_attr_getscope(const struct p101_env *env, struct p101_error *er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -73,7 +73,7 @@ int p101_pthread_attr_getstack(const struct p101_env *env, struct p101_error *er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_getstack(attr, stackaddr, stacksize);
 
     if(ret_val != 0)
@@ -81,7 +81,7 @@ int p101_pthread_attr_getstack(const struct p101_env *env, struct p101_error *er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -90,7 +90,7 @@ int p101_pthread_attr_getstacksize(const struct p101_env *env, struct p101_error
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_getstacksize(attr, stacksize);
 
     if(ret_val != 0)
@@ -98,7 +98,7 @@ int p101_pthread_attr_getstacksize(const struct p101_env *env, struct p101_error
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -107,7 +107,7 @@ int p101_pthread_attr_setinheritsched(const struct p101_env *env, struct p101_er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_setinheritsched(attr, inheritsched);
 
     if(ret_val != 0)
@@ -115,7 +115,7 @@ int p101_pthread_attr_setinheritsched(const struct p101_env *env, struct p101_er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -124,7 +124,7 @@ int p101_pthread_attr_setschedpolicy(const struct p101_env *env, struct p101_err
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_setschedpolicy(attr, policy);
 
     if(ret_val != 0)
@@ -132,7 +132,7 @@ int p101_pthread_attr_setschedpolicy(const struct p101_env *env, struct p101_err
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -141,7 +141,7 @@ int p101_pthread_attr_setscope(const struct p101_env *env, struct p101_error *er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_setscope(attr, contentionscope);
 
     if(ret_val != 0)
@@ -149,7 +149,7 @@ int p101_pthread_attr_setscope(const struct p101_env *env, struct p101_error *er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -158,7 +158,7 @@ int p101_pthread_attr_setstack(const struct p101_env *env, struct p101_error *er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_setstack(attr, stackaddr, stacksize);
 
     if(ret_val != 0)
@@ -166,7 +166,7 @@ int p101_pthread_attr_setstack(const struct p101_env *env, struct p101_error *er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -175,7 +175,7 @@ int p101_pthread_attr_setstacksize(const struct p101_env *env, struct p101_error
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_attr_setstacksize(attr, stacksize);
 
     if(ret_val != 0)
@@ -183,7 +183,7 @@ int p101_pthread_attr_setstacksize(const struct p101_env *env, struct p101_error
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -192,7 +192,7 @@ int p101_pthread_getschedparam(const struct p101_env *env, struct p101_error *er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_getschedparam(thread, policy, param);
 
     if(ret_val != 0)
@@ -200,7 +200,7 @@ int p101_pthread_getschedparam(const struct p101_env *env, struct p101_error *er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -209,7 +209,7 @@ int p101_pthread_setschedparam(const struct p101_env *env, struct p101_error *er
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
     ret_val = pthread_setschedparam(thread, policy, param);
 
     if(ret_val != 0)
@@ -217,6 +217,6 @@ int p101_pthread_setschedparam(const struct p101_env *env, struct p101_error *er
         P101_ERROR_RAISE_ERRNO(err, ret_val);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
