@@ -19,10 +19,12 @@ set(BSD_STANDARD_FLAGS -D_BSD_SOURCE -D__BSD_VISIBLE)
 
 set(LIBRARY_TARGETS p101_thread)
 set(p101_thread_SOURCES
-        src/thread.c
+        src/pthread.c
+        src/signal.c
 )
 set(p101_thread_HEADERS
-        include/p101_thread/thread.h
+        include/p101_thread/p101_pthread.h
+        include/p101_thread/p101_signal.h
 )
 set(p101_thread_LINK_LIBRARIES
         p101_error

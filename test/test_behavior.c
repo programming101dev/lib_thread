@@ -1,6 +1,7 @@
 #include <p101_env/env.h>
 #include <p101_error/error.h>
-#include <p101_thread/thread.h>
+#include <p101_thread/p101_pthread.h>
+#include <p101_thread/p101_signal.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>

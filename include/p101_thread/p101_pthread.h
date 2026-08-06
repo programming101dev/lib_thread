@@ -1,5 +1,5 @@
-#ifndef LIBP101_THREAD_THREAD_H
-#define LIBP101_THREAD_THREAD_H
+#ifndef LIBP101_THREAD_P101_PTHREAD_H
+#define LIBP101_THREAD_P101_PTHREAD_H
 
 /*
  * Copyright 2026 D'Arcy Smith.
@@ -9,12 +9,21 @@
  * You may obtain a copy of the License at
  *
  *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-#include <p101_env/env.h>
-#include <p101_error/attributes.h>
-#include <pthread.h>
-#include <signal.h>
+#ifndef LIBP101_THREAD_SHARED_DECLARATIONS
+    #define LIBP101_THREAD_SHARED_DECLARATIONS
+    #include <p101_env/env.h>
+    #include <p101_error/attributes.h>
+    #include <pthread.h>
+    #include <signal.h>
+#endif    // LIBP101_THREAD_SHARED_DECLARATIONS
 
 #ifdef __cplusplus
 extern "C"
@@ -50,17 +59,15 @@ extern "C"
     int                     p101_pthread_join(const struct p101_env *env, struct p101_error *err, pthread_t thread, void **value_ptr);
     int                     p101_pthread_key_create(const struct p101_env *env, struct p101_error *err, pthread_key_t *key, void (*destructor)(void *));
     int                     p101_pthread_key_delete(const struct p101_env *env, struct p101_error *err, pthread_key_t key);
-    int                     p101_pthread_kill(const struct p101_env *env, struct p101_error *err, pthread_t thread, int sig);
     pthread_t               p101_pthread_self(const struct p101_env *env);
     int                     p101_pthread_setcancelstate(const struct p101_env *env, struct p101_error *err, int state, int *oldstate);
     int                     p101_pthread_setcanceltype(const struct p101_env *env, struct p101_error *err, int type, int *oldtype);
     int                     p101_pthread_setschedparam(const struct p101_env *env, struct p101_error *err, pthread_t thread, int policy, const struct sched_param *param);
     int                     p101_pthread_setspecific(const struct p101_env *env, struct p101_error *err, pthread_key_t key, const void *value);
-    int                     p101_pthread_sigmask(const struct p101_env *env, struct p101_error *err, int how, const sigset_t *restrict set, sigset_t *restrict oset);
     void                    p101_pthread_testcancel(const struct p101_env *env);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif    // LIBP101_THREAD_THREAD_H
+#endif    // LIBP101_THREAD_P101_PTHREAD_H
