@@ -15,7 +15,6 @@
  */
 
 #include "p101_thread/p101_pthread.h"
-#include "p101_thread/p101_signal.h"
 #include <p101_env/wrapper.h>
 
 /*
