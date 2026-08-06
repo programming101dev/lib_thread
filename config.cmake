@@ -19,9 +19,7 @@ set(BSD_STANDARD_FLAGS -D_BSD_SOURCE -D__BSD_VISIBLE)
 
 set(LIBRARY_TARGETS p101_thread)
 set(p101_thread_SOURCES
-        src/posix/pthread.c
-        src/posix/signal.c
-        src/posix_optional/pthread.c
+        src/thread.c
 )
 set(p101_thread_HEADERS
         include/p101_thread/thread.h
