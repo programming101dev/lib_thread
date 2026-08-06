@@ -34,8 +34,6 @@
  * limitations under the License.
  */
 
-#include <p101_env/wrapper.h>
-
 enum
 {
     P101_HEX_SHIFT            = 4,
