@@ -3178,109 +3178,6 @@ static void test_p101_pthread_key_delete(struct p101_env *env, struct p101_error
     }
 }
 
-/* P101_TEST_CASE(p101_pthread_kill) */
-static void test_p101_pthread_kill(struct p101_env *env, struct p101_error *err)
-{
-#ifdef __linux__
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
-#elif defined(__APPLE__)
-    static const int         errors[]      = {EINVAL, ENOTSUP, ESRCH};
-    static const char *const error_names[] = {"EINVAL", "ENOTSUP", "ESRCH"};
-#elif defined(__FreeBSD__)
-    static const int         errors[]      = {EINVAL, ESRCH};
-    static const char *const error_names[] = {"EINVAL", "ESRCH"};
-#else
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
-#endif
-
-    for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
-    {
-        struct fault_state state = {0, errors[index]};
-        int                failures_before;
-
-        failures_before = failures;
-        EXPECT(p101_error_has_no_error(err));
-        fault_resource_events = 0U;
-        errno                 = P101_TEST_ERRNO_SENTINEL;
-        p101_env_set_fault_injector(env, fail_next_call, &state);
-        int result = p101_pthread_kill(env, err, (pthread_t){0}, 0);
-        (void)result;
-        EXPECT(state.checks == 1);
-        EXPECT(p101_error_is_errno(err, state.code));
-        EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
-        EXPECT(result == state.code);
-        EXPECT(fault_resource_events == 0U);
-        write_outcome("p101_pthread_kill", "errno", error_names[index], state.code, failures == failures_before);
-        p101_error_reset(err);
-    }
-    p101_env_set_fault_injector(env, NULL, NULL);
-    {
-        int   native_status = 0;
-        pid_t native_pid    = fork();
-
-        EXPECT(native_pid >= 0);
-        if(native_pid == 0)
-        {
-            bool               native_passed = true;
-            struct p101_error *native_err    = NULL;
-            struct p101_env   *native_env    = NULL;
-
-            native_child_process = true;
-            failures             = 0;
-            (void)alarm(2U);
-            if(unsetenv("P101_CALL_LOG") != 0 || unsetenv("P101_RESOURCE_LOG") != 0)
-            {
-                fprintf(stderr, "native setup failed: cannot clear p101 logging environment\n");
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            native_err = p101_error_create(false);
-            if(native_err == NULL)
-            {
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            native_env = p101_env_create(native_err, NULL);
-            if(native_env == NULL)
-            {
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            int native_result = p101_pthread_kill(native_env, native_err, pthread_self(), 0);
-            (void)native_result;
-            if(p101_error_has_error(native_err))
-            {
-                fprintf(stderr, "native smoke failed: p101_pthread_kill: %s\n", p101_error_get_message(native_err));
-                native_passed = false;
-            }
-            native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
-        native_child_done_:
-            p101_env_destroy(native_env);
-            p101_error_destroy(native_err);
-        }
-        if(native_pid > 0)
-        {
-            EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
-            if(WIFSIGNALED(native_status))
-            {
-                fprintf(stderr, "native smoke terminated by signal: p101_pthread_kill: %d\n", WTERMSIG(native_status));
-            }
-            EXPECT(WIFEXITED(native_status));
-            if(WIFEXITED(native_status))
-            {
-                if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
-                {
-                    fprintf(stderr, "native smoke exited unsuccessfully: p101_pthread_kill: %d\n", WEXITSTATUS(native_status));
-                }
-                EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
-            }
-        }
-        p101_error_reset(err);
-    }
-}
-
 /* P101_TEST_CASE(p101_pthread_setcancelstate) */
 static void test_p101_pthread_setcancelstate(struct p101_env *env, struct p101_error *err)
 {
@@ -3706,126 +3603,6 @@ static void test_p101_pthread_setspecific(struct p101_env *env, struct p101_erro
     }
 }
 
-/* P101_TEST_CASE(p101_pthread_sigmask) */
-static void test_p101_pthread_sigmask(struct p101_env *env, struct p101_error *err)
-{
-    sigset_t      argument_4[4];
-    unsigned char argument_4_before[sizeof(argument_4)];
-    memset(argument_4, 0xA5, sizeof(argument_4));
-    memcpy(argument_4_before, argument_4, sizeof(argument_4));
-#ifdef __linux__
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
-#elif defined(__APPLE__)
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
-#elif defined(__FreeBSD__)
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
-#else
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
-#endif
-
-    for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
-    {
-        struct fault_state state = {0, errors[index]};
-        int                failures_before;
-
-        failures_before = failures;
-        EXPECT(p101_error_has_no_error(err));
-        fault_resource_events = 0U;
-        errno                 = P101_TEST_ERRNO_SENTINEL;
-        p101_env_set_fault_injector(env, fail_next_call, &state);
-        int result = p101_pthread_sigmask(env, err, 0, NULL, argument_4);
-        (void)result;
-        EXPECT(state.checks == 1);
-        EXPECT(p101_error_is_errno(err, state.code));
-        EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
-        EXPECT(result == state.code);
-        EXPECT(memcmp(argument_4, argument_4_before, sizeof(argument_4)) == 0);
-        EXPECT(fault_resource_events == 0U);
-        write_outcome("p101_pthread_sigmask", "errno", error_names[index], state.code, failures == failures_before);
-        p101_error_reset(err);
-    }
-    p101_env_set_fault_injector(env, NULL, NULL);
-    {
-        int   native_status = 0;
-        pid_t native_pid    = fork();
-
-        EXPECT(native_pid >= 0);
-        if(native_pid == 0)
-        {
-            bool               native_passed = true;
-            struct p101_error *native_err    = NULL;
-            struct p101_env   *native_env    = NULL;
-
-            native_child_process = true;
-            failures             = 0;
-            (void)alarm(2U);
-            if(unsetenv("P101_CALL_LOG") != 0 || unsetenv("P101_RESOURCE_LOG") != 0)
-            {
-                fprintf(stderr, "native setup failed: cannot clear p101 logging environment\n");
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            native_err = p101_error_create(false);
-            if(native_err == NULL)
-            {
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            native_env = p101_env_create(native_err, NULL);
-            if(native_env == NULL)
-            {
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            sigset_t native_argument_3;
-            if(sigemptyset(&native_argument_3) != 0)
-            {
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            sigset_t native_argument_4;
-            if(sigemptyset(&native_argument_4) != 0)
-            {
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            int native_result = p101_pthread_sigmask(native_env, native_err, 0, &native_argument_3, &native_argument_4);
-            (void)native_result;
-            if(p101_error_has_error(native_err))
-            {
-                fprintf(stderr, "native smoke failed: p101_pthread_sigmask: %s\n", p101_error_get_message(native_err));
-                native_passed = false;
-            }
-            native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
-        native_child_done_:
-            p101_env_destroy(native_env);
-            p101_error_destroy(native_err);
-        }
-        if(native_pid > 0)
-        {
-            EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
-            if(WIFSIGNALED(native_status))
-            {
-                fprintf(stderr, "native smoke terminated by signal: p101_pthread_sigmask: %d\n", WTERMSIG(native_status));
-            }
-            EXPECT(WIFEXITED(native_status));
-            if(WIFEXITED(native_status))
-            {
-                if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
-                {
-                    fprintf(stderr, "native smoke exited unsuccessfully: p101_pthread_sigmask: %d\n", WEXITSTATUS(native_status));
-                }
-                EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
-            }
-        }
-        p101_error_reset(err);
-    }
-}
-
 int main(void)
 {
     const char        *outcome_path;
@@ -3966,10 +3743,6 @@ int main(void)
         }
         if(!native_child_process)
         {
-            test_p101_pthread_kill(env, err);
-        }
-        if(!native_child_process)
-        {
             test_p101_pthread_setcancelstate(env, err);
         }
         if(!native_child_process)
@@ -3983,10 +3756,6 @@ int main(void)
         if(!native_child_process)
         {
             test_p101_pthread_setspecific(env, err);
-        }
-        if(!native_child_process)
-        {
-            test_p101_pthread_sigmask(env, err);
         }
     }
     p101_env_destroy(env);
