@@ -59,12 +59,30 @@ extern "C"
     int                     p101_pthread_join(const struct p101_env *env, struct p101_error *err, pthread_t thread, void **value_ptr);
     int                     p101_pthread_key_create(const struct p101_env *env, struct p101_error *err, pthread_key_t *key, void (*destructor)(void *));
     int                     p101_pthread_key_delete(const struct p101_env *env, struct p101_error *err, pthread_key_t key);
-    pthread_t               p101_pthread_self(const struct p101_env *env);
-    int                     p101_pthread_setcancelstate(const struct p101_env *env, struct p101_error *err, int state, int *oldstate);
-    int                     p101_pthread_setcanceltype(const struct p101_env *env, struct p101_error *err, int type, int *oldtype);
-    int                     p101_pthread_setschedparam(const struct p101_env *env, struct p101_error *err, pthread_t thread, int policy, const struct sched_param *param);
-    int                     p101_pthread_setspecific(const struct p101_env *env, struct p101_error *err, pthread_key_t key, const void *value);
-    void                    p101_pthread_testcancel(const struct p101_env *env);
+
+    /*
+     * Formats thread as the stable text used in resource records: "thread="
+     * followed by the lowercase hex image of the pthread_t object
+     * representation, one two-digit group per byte in storage order. text is
+     * always NUL terminated when text_size is non-zero, and the text is
+     * truncated rather than overflowed when text_size is too small.
+     *
+     * Caveat: pthread_t is opaque and POSIX defines thread equality only
+     * through pthread_equal(). This formatter compares byte images, so two
+     * pthread_t values that pthread_equal() reports as equal can still format
+     * differently (padding bytes, differing copies), and where pthread_t is a
+     * pointer into a reused control block two distinct threads can format
+     * identically. Treat the text as a correlation hint for offline analysis,
+     * never as a thread identity test.
+     */
+    void p101_pthread_resource_metadata(const struct p101_env *env, pthread_t thread, char *text, size_t text_size);
+
+    pthread_t p101_pthread_self(const struct p101_env *env);
+    int       p101_pthread_setcancelstate(const struct p101_env *env, struct p101_error *err, int state, int *oldstate);
+    int       p101_pthread_setcanceltype(const struct p101_env *env, struct p101_error *err, int type, int *oldtype);
+    int       p101_pthread_setschedparam(const struct p101_env *env, struct p101_error *err, pthread_t thread, int policy, const struct sched_param *param);
+    int       p101_pthread_setspecific(const struct p101_env *env, struct p101_error *err, pthread_key_t key, const void *value);
+    void      p101_pthread_testcancel(const struct p101_env *env);
 
 #ifdef __cplusplus
 }

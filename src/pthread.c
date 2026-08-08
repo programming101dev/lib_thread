@@ -15,6 +15,7 @@
  */
 
 #include "p101_thread/p101_pthread.h"
+#include <p101_env/resource_classes.h>
 #include <p101_env/wrapper.h>
 
 /*
@@ -41,32 +42,40 @@ enum
     P101_MUTEX_OWNER_ID_SIZE  = P101_ENV_POINTER_RESOURCE_ID_SIZE + P101_THREAD_METADATA_SIZE + 1
 };
 
-static void pthread_metadata(pthread_t thread, char metadata[P101_THREAD_METADATA_SIZE])
+void p101_pthread_resource_metadata(const struct p101_env *env, pthread_t thread, char *text, size_t text_size)
 {
-    static const char    digits[] = "0123456789abcdef";
-    static const char    prefix[] = "thread=";
-    const unsigned char *bytes;
-    size_t               offset;
+    static const char digits[] = "0123456789abcdef";
+    static const char prefix[] = "thread=";
 
-    bytes = (const unsigned char *)&thread;
-    for(offset = 0U; offset < sizeof(prefix) - 1U; offset++)
+    P101_TRACE(env);
+
+    if(text != NULL && text_size > 0U)
     {
-        metadata[offset] = prefix[offset];
+        const unsigned char *bytes;
+        size_t               offset;
+
+        bytes = (const unsigned char *)&thread;
+        for(offset = 0U; offset < sizeof(prefix) - 1U && offset + 1U < text_size; offset++)
+        {
+            text[offset] = prefix[offset];
+        }
+        for(size_t i = 0U; i < sizeof(pthread_t) && offset + 2U < text_size; i++)
+        {
+            text[offset++] = digits[(bytes[i] >> P101_HEX_SHIFT) & P101_HEX_MASK];
+            text[offset++] = digits[bytes[i] & P101_HEX_MASK];
+        }
+        text[offset] = '\0';
     }
-    for(size_t i = 0U; i < sizeof(pthread_t); i++)
-    {
-        metadata[offset++] = digits[(bytes[i] >> P101_HEX_SHIFT) & P101_HEX_MASK];
-        metadata[offset++] = digits[bytes[i] & P101_HEX_MASK];
-    }
-    metadata[offset] = '\0';
+
+    P101_TRACE_EXIT(env);
 }
 
 static void pthread_track_joinable(const struct p101_env *env, p101_env_resource_kind event, pthread_t thread, const char *file_name, const char *function_name, int line_number)
 {
     char resource_id[P101_THREAD_METADATA_SIZE];
 
-    pthread_metadata(thread, resource_id);
-    p101_env_track_resource(env, event, "pthread-joinable-thread", resource_id, NULL, 0U, NULL, file_name, function_name, line_number);
+    p101_pthread_resource_metadata(env, thread, resource_id, sizeof(resource_id));
+    p101_env_track_resource(env, event, P101_RESOURCE_CLASS_PTHREAD_JOINABLE_THREAD, resource_id, NULL, 0U, NULL, file_name, function_name, line_number);
 }
 
 static void pthread_track_join_wait(const struct p101_env *env, p101_env_resource_kind event, pthread_t target, const char *file_name, const char *function_name, int line_number)
@@ -76,9 +85,9 @@ static void pthread_track_join_wait(const struct p101_env *env, p101_env_resourc
     pthread_t current;
 
     current = p101_pthread_self(env);
-    pthread_metadata(current, current_id);
-    pthread_metadata(target, target_id);
-    p101_env_track_resource(env, event, "pthread-join-wait", current_id, target_id, 0U, current_id, file_name, function_name, line_number);
+    p101_pthread_resource_metadata(env, current, current_id, sizeof(current_id));
+    p101_pthread_resource_metadata(env, target, target_id, sizeof(target_id));
+    p101_env_track_resource(env, event, P101_RESOURCE_CLASS_PTHREAD_JOIN_WAIT, current_id, target_id, 0U, current_id, file_name, function_name, line_number);
 }
 
 #define P101_PTHREAD_TRACK_JOINABLE_ACQUIRE(env, thread) pthread_track_joinable((env), P101_ENV_RESOURCE_ACQUIRE, (thread), __FILE__, __func__, __LINE__)
@@ -106,12 +115,10 @@ int p101_pthread_atfork(const struct p101_env *env, struct p101_error *err, void
 
 int p101_pthread_attr_destroy(const struct p101_env *env, struct p101_error *err, pthread_attr_t *attr)
 {
-    char resource_id[P101_ENV_POINTER_RESOURCE_ID_SIZE];
-    int  ret_val;
+    int ret_val;
 
     P101_TRACE(env);
     P101_WRAPPER_FAULT_RETURN_CODE(env, err, ret_val);
-    p101_env_pointer_resource_id(resource_id, sizeof(resource_id), (const void *)attr);
     errno   = 0;
     ret_val = pthread_attr_destroy(attr);
 
@@ -121,7 +128,7 @@ int p101_pthread_attr_destroy(const struct p101_env *env, struct p101_error *err
     }
     else
     {
-        P101_TRACK_RESOURCE_RELEASE(env, "pthread-attributes", resource_id, NULL);
+        P101_TRACK_POINTER_RESOURCE_RELEASE(env, P101_RESOURCE_CLASS_PTHREAD_ATTRIBUTES, (const void *)attr, NULL);
     }
 
     P101_WRAPPER_DONE(env);
@@ -194,7 +201,7 @@ int p101_pthread_attr_init(const struct p101_env *env, struct p101_error *err, p
     }
     else
     {
-        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, "pthread-attributes", (const void *)attr, 0U, NULL);
+        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, P101_RESOURCE_CLASS_PTHREAD_ATTRIBUTES, (const void *)attr, 0U, NULL);
     }
 
     P101_WRAPPER_DONE(env);
